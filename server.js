@@ -8,8 +8,7 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
 const PORT = process.env.PORT || 5000
-const isProduction = process.env.NODE_ENV === 'production'
-const dataDir = isProduction ? '/var/data' : path.join(__dirname, 'data')
+const dataDir = path.join(__dirname, 'data')
 const messagesFile = path.join(dataDir, 'messages.json')
 const testimonialsFile = path.join(dataDir, 'testimonials.json')
 
