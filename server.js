@@ -19,7 +19,7 @@ app.use(cors({
     'http://localhost:5173',
     'https://abhay-sonone-portfolio.vercel.app',
   ],
-  methods: ['GET', 'POST'],
+  methods: ['GET', 'POST', 'OPTIONS'],
   credentials: true,
 }))
 
