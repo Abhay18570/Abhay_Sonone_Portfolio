@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import './Testimonials.css'
 
+const apiBaseUrl = import.meta.env.VITE_API_URL
+
 function getInitials(name) {
   return name
     .split(' ')
@@ -23,7 +25,7 @@ function Testimonials() {
 
   // Load testimonials from the server on mount
   useEffect(() => {
-    fetch('http://localhost:5000/api/testimonials')
+    fetch(`${apiBaseUrl}/testimonials`)
       .then(res => res.json())
       .then(data => setTestimonials(data))
       .catch(() => {})
@@ -47,7 +49,7 @@ function Testimonials() {
     if (Object.keys(errs).length > 0) return
 
     try {
-      const res = await fetch('http://localhost:5000/api/testimonials', {
+      const res = await fetch(`${apiBaseUrl}/testimonials`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name: name.trim(), message: message.trim() }),
