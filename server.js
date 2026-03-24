@@ -58,6 +58,9 @@ function getTestimonialsData() {
 }
 
 function createTransporter() {
+  console.log('EMAIL_USER present:', Boolean(process.env.EMAIL_USER))
+  console.log('EMAIL_PASS present:', Boolean(process.env.EMAIL_PASS))
+
   return nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -91,14 +94,13 @@ Submitted At: ${submittedAt}`,
 
   try {
     const transporter = createTransporter()
+    console.log('Contact email sending started for:', email)
     await transporter.sendMail(mailOptions)
+    console.log('Contact email sent successfully to:', recipientEmail)
     return 'sent'
   } catch (error) {
-    if (error?.code === 'EAUTH') {
-      console.error('Failed to send contact message email: Gmail authentication failed.', error)
-    } else {
-      console.error('Failed to send contact message email:', error)
-    }
+    console.error('Failed to send contact message email:', error?.message || error)
+    console.error('Email error code:', error?.code || 'UNKNOWN')
     return 'failed'
   }
 }
