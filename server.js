@@ -62,11 +62,16 @@ function createTransporter() {
   console.log('EMAIL_PASS present:', Boolean(process.env.EMAIL_PASS))
 
   return nodemailer.createTransport({
-    service: 'gmail',
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true,
     auth: {
       user: process.env.EMAIL_USER,
       pass: process.env.EMAIL_PASS,
     },
+    connectionTimeout: 10000,
+    greetingTimeout: 10000,
+    socketTimeout: 15000,
   })
 }
 
@@ -94,6 +99,15 @@ Submitted At: ${submittedAt}`,
 
   try {
     const transporter = createTransporter()
+    try {
+      await transporter.verify()
+      console.log('Nodemailer transporter verified successfully.')
+    } catch (verifyError) {
+      console.error('Nodemailer transporter verification failed:', verifyError?.message || verifyError)
+      console.error('Transporter verify error code:', verifyError?.code || 'UNKNOWN')
+      return 'failed'
+    }
+
     console.log('Contact email sending started for:', email)
     await transporter.sendMail(mailOptions)
     console.log('Contact email sent successfully to:', recipientEmail)
