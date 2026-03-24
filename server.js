@@ -12,23 +12,13 @@ const dataDir = path.join(__dirname, 'data')
 const messagesFile = path.join(dataDir, 'messages.json')
 const testimonialsFile = path.join(dataDir, 'testimonials.json')
 
-const frontendOrigins = [
-  'http://localhost:5173',
-  process.env.FRONTEND_URL,
-  ...(process.env.FRONTEND_URLS?.split(',').map((origin) => origin.trim()) || []),
-].filter(Boolean)
-
 const app = express()
 
 app.use(cors({
-  origin(origin, callback) {
-    if (!origin || frontendOrigins.includes(origin)) {
-      callback(null, true)
-      return
-    }
-
-    callback(new Error('Not allowed by CORS'))
-  },
+  origin: [
+    'http://localhost:5173',
+    'https://abhay-sonone-portfolio.vercel.app',
+  ],
   methods: ['GET', 'POST'],
   credentials: true,
 }))
