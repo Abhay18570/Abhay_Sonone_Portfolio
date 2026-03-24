@@ -1,6 +1,7 @@
 import express from 'express'
 import cors from 'cors'
 import fs from 'fs'
+import nodemailer from 'nodemailer'
 import path from 'path'
 import { fileURLToPath } from 'url'
 
@@ -11,8 +12,16 @@ const PORT = process.env.PORT || 5000
 const dataDir = path.join(__dirname, 'data')
 const messagesFile = path.join(dataDir, 'messages.json')
 const testimonialsFile = path.join(dataDir, 'testimonials.json')
+const recipientEmail = 'abhaysonone0@gmail.com'
 
 const app = express()
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
+  },
+})
 
 app.use(cors({
   origin: [
@@ -83,7 +92,44 @@ app.post('/messages', (req, res) => {
   data.messages.push(newMessage)
   writeJsonFile(messagesFile, data)
 
-  return res.status(201).json(newMessage)
+  const submittedAt = new Date().toLocaleString()
+  const mailOptions = {
+    from: process.env.EMAIL_USER,
+    to: recipientEmail,
+    replyTo: email,
+    subject: `New Portfolio Contact Message from ${name}`,
+    text: `New Portfolio Contact Message
+
+Name: ${name}
+Email: ${email}
+Message:
+${message}
+
+Submitted At: ${submittedAt}`,
+  }
+
+  if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+    console.error('Email credentials are missing. Set EMAIL_USER and EMAIL_PASS.')
+    return res.status(201).json({
+      ...newMessage,
+      emailStatus: 'not_configured',
+    })
+  }
+
+  transporter.sendMail(mailOptions)
+    .then(() => {
+      res.status(201).json({
+        ...newMessage,
+        emailStatus: 'sent',
+      })
+    })
+    .catch((error) => {
+      console.error('Failed to send contact message email:', error)
+      res.status(201).json({
+        ...newMessage,
+        emailStatus: 'failed',
+      })
+    })
 })
 
 app.get('/testimonials', (req, res) => {
@@ -140,7 +186,44 @@ app.post('/api/messages', (req, res) => {
   data.messages.push(newMessage)
   writeJsonFile(messagesFile, data)
 
-  return res.status(201).json(newMessage)
+  const submittedAt = new Date().toLocaleString()
+  const mailOptions = {
+    from: process.env.EMAIL_USER,
+    to: recipientEmail,
+    replyTo: email,
+    subject: `New Portfolio Contact Message from ${name}`,
+    text: `New Portfolio Contact Message
+
+Name: ${name}
+Email: ${email}
+Message:
+${message}
+
+Submitted At: ${submittedAt}`,
+  }
+
+  if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+    console.error('Email credentials are missing. Set EMAIL_USER and EMAIL_PASS.')
+    return res.status(201).json({
+      ...newMessage,
+      emailStatus: 'not_configured',
+    })
+  }
+
+  transporter.sendMail(mailOptions)
+    .then(() => {
+      res.status(201).json({
+        ...newMessage,
+        emailStatus: 'sent',
+      })
+    })
+    .catch((error) => {
+      console.error('Failed to send contact message email:', error)
+      res.status(201).json({
+        ...newMessage,
+        emailStatus: 'failed',
+      })
+    })
 })
 
 app.get('/api/testimonials', (req, res) => {
