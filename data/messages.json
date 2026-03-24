@@ -1,0 +1,18 @@
+{
+  "messages": [
+    {
+      "id": 1,
+      "name": "Sagar Talpade",
+      "email": "sagartalpade66@gmail.com",
+      "message": "hello",
+      "date": "2026-03-12"
+    },
+    {
+      "id": 2,
+      "name": "Sumit Shidole",
+      "email": "sumitshidole66@gmail.com",
+      "message": "I want to build a web based project with you ",
+      "date": "2026-03-24"
+    }
+  ]
+}
