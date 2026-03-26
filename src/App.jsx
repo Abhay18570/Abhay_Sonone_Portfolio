@@ -9,6 +9,7 @@ import Contact from './components/Contact'
 import Footer from './components/Footer'
 import StarField from './components/StarField'
 import IntroAnimation from './components/IntroAnimation'
+import UFOCursor from './components/UFOCursor'
 
 const INTRO_SESSION_KEY = 'abhay-portfolio-intro-played'
 
@@ -81,6 +82,7 @@ function App() {
 
   return (
     <>
+      <UFOCursor />
       {showIntro && <IntroAnimation onComplete={handleIntroFinish} />}
 
       <div className={`app ${appVisible ? 'app-visible' : 'app-hidden'}`}>

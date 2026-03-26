@@ -46,6 +46,21 @@ body {
   min-height: 100vh;
 }
 
+@media (hover: hover) and (pointer: fine) and (min-width: 769px) {
+  body.ufo-cursor-active,
+  body.ufo-cursor-active a,
+  body.ufo-cursor-active button,
+  body.ufo-cursor-active [role='button'],
+  body.ufo-cursor-active input,
+  body.ufo-cursor-active textarea,
+  body.ufo-cursor-active select,
+  body.ufo-cursor-active summary,
+  body.ufo-cursor-active label,
+  body.ufo-cursor-active .btn {
+    cursor: none !important;
+  }
+}
+
 body.intro-active {
   overflow: hidden;
 }
