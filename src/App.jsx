@@ -4,6 +4,7 @@ import Hero from './components/Hero'
 import About from './components/About'
 import Education from './components/Education'
 import TechStack from './components/TechStack'
+import Projects from './components/Projects'
 import Testimonials from './components/Testimonials'
 import Contact from './components/Contact'
 import Footer from './components/Footer'
@@ -93,6 +94,7 @@ function App() {
         <About />
         <Education />
         <TechStack />
+        <Projects />
         <Testimonials />
         <Contact />
       </main>
