@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import './Testimonials.css'
 
-const apiBaseUrl = import.meta.env.VITE_API_URL
-
 function getInitials(name) {
   return name
     .split(' ')
@@ -25,8 +23,11 @@ function Testimonials() {
 
   // Load testimonials from the server on mount
   useEffect(() => {
-    fetch(`${apiBaseUrl}/testimonials`)
-      .then(res => res.json())
+    fetch('http://localhost:8080/api/testimonials/approved')
+      .then(res => {
+        if (!res.ok) throw new Error('Failed to load approved testimonials')
+        return res.json()
+      })
       .then(data => setTestimonials(data))
       .catch(() => {})
   }, [])
@@ -49,14 +50,12 @@ function Testimonials() {
     if (Object.keys(errs).length > 0) return
 
     try {
-      const res = await fetch(`${apiBaseUrl}/testimonials`, {
+      const res = await fetch('http://localhost:8080/api/testimonials', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name: name.trim(), message: message.trim() }),
       })
       if (!res.ok) throw new Error('Failed to submit')
-      const newEntry = await res.json()
-      setTestimonials(prev => [...prev, newEntry])
       setName('')
       setMessage('')
       setErrors({})
@@ -117,7 +116,11 @@ function Testimonials() {
             <h3 className="form-heading">Leave a Testimonial</h3>
             <p className="form-subtitle">Share your experience working with me.</p>
 
-            {success && <p className="form-success">Thank you! Your testimonial has been added.</p>}
+            {success && (
+              <p className="form-success">
+                Testimonial submitted successfully. Waiting for approval.
+              </p>
+            )}
 
             <form className="testimonial-form" onSubmit={handleSubmit} noValidate>
               <div className="form-group">

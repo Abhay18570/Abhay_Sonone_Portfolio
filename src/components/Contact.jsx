@@ -3,8 +3,6 @@ import './Contact.css'
 import { FaLinkedin, FaGithub, FaPhoneAlt } from 'react-icons/fa'
 import { MdEmail } from 'react-icons/md'
 
-const apiBaseUrl = import.meta.env.VITE_API_URL
-
 const contactInfo = [
   {
     icon: <FaLinkedin />,
@@ -49,12 +47,17 @@ function Contact() {
     e.preventDefault()
     setLoading(true)
     try {
-      const res = await fetch(`${apiBaseUrl}/messages`, {
+      const res = await fetch('http://localhost:8080/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form),
+        body: JSON.stringify({
+          name: form.name,
+          email: form.email,
+          message: form.message,
+        }),
       })
       if (!res.ok) throw new Error('Failed to send')
+      alert('Message sent successfully!')
       setSent(true)
       setForm({ name: '', email: '', message: '' })
       setTimeout(() => setSent(false), 4000)
