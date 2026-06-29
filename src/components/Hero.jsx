@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import './Hero.css'
 import profileImageSrc from '../images/abhay-pf.png'
-import FloatingImages from './FloatingImages'
 
 const typingWords = ['Designer', 'Coder', 'Developer', 'Problem Solver', 'Tech Explorer']
 
@@ -55,7 +54,6 @@ function Hero() {
       <div className="hero-orb orb-1" />
       <div className="hero-orb orb-2" />
       <div className="hero-orb orb-3" />
-      <FloatingImages />
 
       <div className="container hero-content">
         <div className="profile-wrapper fade-in">

@@ -1,0 +1,173 @@
+.journey-moments {
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 18% 30%, rgba(0, 245, 255, 0.08), transparent 26%),
+    radial-gradient(circle at 82% 54%, rgba(168, 85, 247, 0.12), transparent 28%),
+    linear-gradient(180deg, transparent, rgba(5, 13, 26, 0.46), transparent);
+}
+
+.journey-moments::before,
+.journey-moments::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.journey-moments::before {
+  background-image:
+    radial-gradient(circle, rgba(255, 255, 255, 0.28) 0 1px, transparent 1.5px),
+    radial-gradient(circle, rgba(0, 245, 255, 0.2) 0 1px, transparent 1.4px);
+  background-position: 20px 10px, 90px 70px;
+  background-size: 150px 150px, 230px 230px;
+  opacity: 0.2;
+}
+
+.journey-moments::after {
+  background:
+    linear-gradient(90deg, rgba(2, 4, 8, 0.96), transparent 12%, transparent 88%, rgba(2, 4, 8, 0.96)),
+    radial-gradient(circle at center, transparent 48%, rgba(2, 4, 8, 0.48) 100%);
+  z-index: 2;
+}
+
+.journey-carousel {
+  position: relative;
+  z-index: 3;
+  margin-top: -18px;
+  overflow: hidden;
+  padding: 28px 0 34px;
+  mask-image: linear-gradient(90deg, transparent, black 8%, black 92%, transparent);
+}
+
+.journey-track {
+  display: flex;
+  width: max-content;
+  gap: 24px;
+  animation: journeyScroll 42s linear infinite;
+  will-change: transform;
+}
+
+.journey-carousel:hover .journey-track {
+  animation-play-state: paused;
+}
+
+.journey-card {
+  position: relative;
+  flex: 0 0 clamp(240px, 26vw, 340px);
+  height: clamp(260px, 30vw, 380px);
+  padding: 1px;
+  border-radius: 24px;
+  background: linear-gradient(135deg, rgba(0, 245, 255, 0.55), rgba(168, 85, 247, 0.46), rgba(59, 130, 246, 0.4));
+  box-shadow:
+    0 0 24px rgba(0, 245, 255, 0.12),
+    0 0 46px rgba(168, 85, 247, 0.08);
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+.journey-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow:
+    0 0 30px rgba(0, 245, 255, 0.25),
+    0 0 62px rgba(168, 85, 247, 0.16);
+}
+
+.journey-image-frame {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 23px;
+  background:
+    radial-gradient(circle at top, rgba(0, 245, 255, 0.14), transparent 42%),
+    rgba(5, 13, 26, 0.72);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.journey-image-frame::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background:
+    linear-gradient(180deg, transparent 52%, rgba(2, 4, 8, 0.72)),
+    radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.12), transparent 24%);
+  pointer-events: none;
+}
+
+.journey-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1);
+  transition: transform 0.45s ease, filter 0.45s ease;
+}
+
+.journey-card:hover .journey-image {
+  transform: scale(1.08);
+  filter: saturate(1.12) contrast(1.04);
+}
+
+@keyframes journeyScroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(calc(-50% - 12px)); }
+}
+
+@media (max-width: 768px) {
+  .journey-carousel {
+    overflow-x: auto;
+    overflow-y: visible;
+    padding: 20px 0 26px;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    mask-image: none;
+  }
+
+  .journey-carousel::-webkit-scrollbar {
+    height: 4px;
+  }
+
+  .journey-carousel::-webkit-scrollbar-thumb {
+    background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple));
+    border-radius: 999px;
+  }
+
+  .journey-track {
+    gap: 18px;
+    animation: none;
+    padding: 0 18px;
+  }
+
+  .journey-card {
+    flex-basis: min(76vw, 300px);
+    height: 330px;
+    scroll-snap-align: center;
+  }
+
+  .journey-card[aria-hidden='true'] {
+    display: none;
+  }
+
+}
+
+@media (max-width: 480px) {
+  .journey-card {
+    flex-basis: 82vw;
+    height: 300px;
+    border-radius: 22px;
+  }
+
+  .journey-image-frame {
+    border-radius: 21px;
+  }
+
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .journey-track {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
