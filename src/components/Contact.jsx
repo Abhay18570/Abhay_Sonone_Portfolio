@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import './Contact.css'
 import { FaLinkedin, FaGithub, FaPhoneAlt } from 'react-icons/fa'
 import { MdEmail } from 'react-icons/md'
+import { API_BASE_URL } from '../config/api'
 
 const contactInfo = [
   {
@@ -46,8 +47,11 @@ function Contact() {
   const handleSubmit = async (e) => {
     e.preventDefault()
     setLoading(true)
+    const controller = new AbortController()
+    const timeoutId = setTimeout(() => controller.abort(), 15000)
+
     try {
-      const res = await fetch('http://localhost:8080/api/contact', {
+      const res = await fetch(`${API_BASE_URL}/api/contact`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -55,15 +59,23 @@ function Contact() {
           email: form.email,
           message: form.message,
         }),
+        signal: controller.signal,
       })
-      if (!res.ok) throw new Error('Failed to send')
-      alert('Message sent successfully!')
+      if (!res.ok) throw new Error('SERVER_ERROR')
+      alert('Message sent successfully.')
       setSent(true)
       setForm({ name: '', email: '', message: '' })
       setTimeout(() => setSent(false), 4000)
-    } catch {
-      alert('Could not send message. Make sure the server is running.')
+    } catch (error) {
+      if (error.name === 'AbortError') {
+        alert('Timeout error. Please try again.')
+      } else if (error.message === 'SERVER_ERROR') {
+        alert('Server error. Please try again later.')
+      } else {
+        alert('Network error. Please check your connection.')
+      }
     } finally {
+      clearTimeout(timeoutId)
       setLoading(false)
     }
   }
@@ -109,7 +121,7 @@ function Contact() {
 
               {sent && (
                 <div className="form-success">
-                  ✅ Message sent! I'll get back to you soon.
+                  Message sent successfully.
                 </div>
               )}
 

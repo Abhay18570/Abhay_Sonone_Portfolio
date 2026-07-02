@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import './Testimonials.css'
+import { API_BASE_URL } from '../config/api'
 
 function getInitials(name) {
   return name
@@ -19,17 +20,29 @@ function Testimonials() {
   const [message, setMessage] = useState('')
   const [errors, setErrors] = useState({})
   const [success, setSuccess] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
   const [testimonials, setTestimonials] = useState([])
 
   // Load testimonials from the server on mount
   useEffect(() => {
-    fetch('http://localhost:8080/api/testimonials/approved')
+    const controller = new AbortController()
+    const timeoutId = setTimeout(() => controller.abort(), 15000)
+
+    fetch(`${API_BASE_URL}/api/testimonials/approved`, {
+      signal: controller.signal,
+    })
       .then(res => {
-        if (!res.ok) throw new Error('Failed to load approved testimonials')
+        if (!res.ok) throw new Error('SERVER_ERROR')
         return res.json()
       })
       .then(data => setTestimonials(data))
       .catch(() => {})
+      .finally(() => clearTimeout(timeoutId))
+
+    return () => {
+      clearTimeout(timeoutId)
+      controller.abort()
+    }
   }, [])
 
   const allTestimonials = [...testimonials].reverse()
@@ -49,20 +62,34 @@ function Testimonials() {
     setErrors(errs)
     if (Object.keys(errs).length > 0) return
 
+    setSubmitting(true)
+    const controller = new AbortController()
+    const timeoutId = setTimeout(() => controller.abort(), 15000)
+
     try {
-      const res = await fetch('http://localhost:8080/api/testimonials', {
+      const res = await fetch(`${API_BASE_URL}/api/testimonials`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name: name.trim(), message: message.trim() }),
+        signal: controller.signal,
       })
-      if (!res.ok) throw new Error('Failed to submit')
+      if (!res.ok) throw new Error('SERVER_ERROR')
       setName('')
       setMessage('')
       setErrors({})
       setSuccess(true)
       setTimeout(() => setSuccess(false), 3000)
-    } catch {
-      alert('Could not submit testimonial. Make sure the server is running.')
+    } catch (error) {
+      if (error.name === 'AbortError') {
+        alert('Timeout error. Please try again.')
+      } else if (error.message === 'SERVER_ERROR') {
+        alert('Server error. Please try again later.')
+      } else {
+        alert('Network error. Please check your connection.')
+      }
+    } finally {
+      clearTimeout(timeoutId)
+      setSubmitting(false)
     }
   }
 
@@ -118,7 +145,7 @@ function Testimonials() {
 
             {success && (
               <p className="form-success">
-                Testimonial submitted successfully. Waiting for approval.
+                Testimonial submitted successfully.
               </p>
             )}
 
@@ -145,8 +172,8 @@ function Testimonials() {
                 {errors.message && <span className="field-error">{errors.message}</span>}
               </div>
 
-              <button type="submit" className="btn-testimonial btn-submit">
-                Submit Testimonial
+              <button type="submit" className="btn-testimonial btn-submit" disabled={submitting}>
+                {submitting ? 'Submitting...' : 'Submit Testimonial'}
               </button>
             </form>
           </div>
