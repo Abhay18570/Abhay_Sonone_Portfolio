@@ -26,7 +26,7 @@ function Testimonials() {
   // Load testimonials from the server on mount
   useEffect(() => {
     const controller = new AbortController()
-    const timeoutId = setTimeout(() => controller.abort(), 15000)
+    const timeoutId = setTimeout(() => controller.abort(), 60000)
 
     fetch(`${API_BASE_URL}/api/testimonials/approved`, {
       signal: controller.signal,
@@ -64,7 +64,7 @@ function Testimonials() {
 
     setSubmitting(true)
     const controller = new AbortController()
-    const timeoutId = setTimeout(() => controller.abort(), 15000)
+    const timeoutId = setTimeout(() => controller.abort(), 60000)
 
     try {
       const res = await fetch(`${API_BASE_URL}/api/testimonials`, {
