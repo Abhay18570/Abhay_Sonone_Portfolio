@@ -1,6 +1,7 @@
 import React from 'react'
 import './Projects.css'
 import nagarseva from '../project_images/nagarseva.png'
+import sahayak from '../project_images/sahayak.png'
 import talentflow from '../project_images/talentflow.png'
 
 const projects = [
@@ -17,6 +18,13 @@ const projects = [
     description:
       'An internship and career guidance platform that connects students with recruiters, analyzes skills, and suggests personalized career paths.',
     link: 'https://talent-flow-black.vercel.app/',
+  },
+  {
+    title: 'Sahayak',
+    image: sahayak,
+    description:
+      'A trusted local-service platform that helps users discover and connect with reliable professionals for everyday needs in their area.',
+    link: 'https://sahayak-your-trusted-local-service.vercel.app/',
   },
 ]
 

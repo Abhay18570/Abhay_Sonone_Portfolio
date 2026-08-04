@@ -52,9 +52,15 @@ function TechStack() {
           <div className="orbit-ring orbit-ring-4" aria-hidden="true" />
 
           <div className="galaxy-core">
+            <span className="solar-texture" aria-hidden="true" />
+            <span className="sunspot sunspot-one" aria-hidden="true" />
+            <span className="sunspot sunspot-two" aria-hidden="true" />
+            <span className="sunspot sunspot-three" aria-hidden="true" />
+            <span className="solar-flare solar-flare-one" aria-hidden="true" />
+            <span className="solar-flare solar-flare-two" aria-hidden="true" />
             <span className="core-kicker">My</span>
             <h3>Tech Universe</h3>
-            <span className="core-pulse" />
+            <span className="core-pulse" aria-hidden="true" />
           </div>
 
           <div className="tech-orbits">
